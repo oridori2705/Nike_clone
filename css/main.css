@@ -1,0 +1,197 @@
+@charset "utf-8";
+
+html{
+    font-family: 'Poppins','Noto Sans KR';
+    font-size : 14px;/*root의 폰트사이즈 14px->rem의 기준*/
+
+}
+
+body {
+    overflow-x: hidden;/*일반적으로 가로 스크롤을막아서 안전하게됨*/
+    color: rgb(29,29,31);
+    letter-spacing : -0.05em;
+    background-color: white;
+    margin:0;
+}
+
+p {
+    line-height : 1.7;
+}
+a{
+    color: rgb(29,29,31);
+    text-decoration: none;
+}
+
+.global-nav {
+    height: 44px;
+    padding: 0 1rem;
+}
+
+.global-nav-link,
+.local-nav-link{
+    display: flex;
+    margin : 0 auto;
+    align-items: center;
+    height: 100%;
+    max-width: 1000px;
+}
+.global-nav-link img{
+    height: 35px;
+}
+.global-menu a{
+    margin-left : 1em;
+    
+}
+.global-nav-link{
+    justify-content: space-between;
+}
+
+
+.local-nav{
+    height:60px;
+    padding: 0 1rem;
+    border-bottom: 1px solid #ddd;
+}
+.local-nav-link a:not(.product-name){
+    margin-left: 1em;
+    align-items: center;
+
+}
+.local-nav-link .product-name{
+    margin-right: auto;
+    font-size: 20px;;
+    font-weight: 600;
+}
+
+
+/*첫번째 섹션*/
+.scroll-section{
+    padding-top: 50vh;
+}
+
+#scroll-section-0 h1{
+    font-size: 4rem;
+    text-align : center;
+}
+.main-message{
+    display: flex;
+    align-items: center;/*수직 가운데 정렬*/
+    justify-content: center;/*수평 가운데 정렬*/
+    height: 3em;/*현재 아래에 있는2.5rem의 3배를 뜻함*/
+    font-size: 2.5rem; /*root의 font-size의 2.5배*/
+}
+.main-message p{
+    font-weight: bold;
+    text-align: center;
+    line-height: 1.2;
+}
+
+/*두번째 섹션*/
+.description{
+    max-width: 1000px;
+    margin: 0 auto;
+    padding :0 1rem;/*위에 nav와 padding맞춰줌*/
+    font-size: 1.2rem;
+    color: #888
+
+}
+.description strong{
+    float: left;
+    margin-right: 0.2em;/*3배의 20퍼센트*/
+    font-size: 3rem;/*1rem은 14px 3rem은 14*3배*/
+    color:rgb(29,29,31)
+    
+}
+
+/*세번째 섹션*/
+#scroll-section-2 .main-message{
+    font-size: 3.5rem;
+}
+.main-message small{
+    display: block;
+    font-size: 1.2rem;
+    margin-bottom: 0.5em;
+}
+.desc-message{
+    font-weight: bold;
+    width: 50%;
+    text-align: center;
+}
+.pin {
+    width: 1px;
+    height: 100px;
+    background-color: rgb(29,29,31);
+}
+
+
+
+/*네번째 섹션*/
+.mid-message{
+    max-width: 1000px;
+    margin: 0 auto;
+    font-size: 2rem;
+    padding : 0 1em;
+    color: #888;
+}
+.mid-message strong{
+    color : rgb(29,29,31);
+}
+
+/*네번째 섹션*/
+.canvas-caption{
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 1em;
+    color : #888;
+    font-size: 1.2rem;
+}
+
+.footer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 7rem;
+    color:azure;
+    background-color: rgb(29,29,31);
+}
+
+/*모바일 기준으로 위 스타일 작성했으므로 데스크톱기준으로 media작성함
+창크기가 1024px이상이면 아래 스타일 적용
+*/
+@media (min-width:1024px){
+    .local-nav-link .product-name{
+        font-size: 3rem;
+    }
+    /*섹션 1*/
+    #scroll-section-0 h1 {
+        font-size: 9vw;
+    }
+    .main-message{
+        font-size: 4vw
+    }
+    /*섹션2*/
+    .description{
+        font-size: 2rem;
+    }
+    .description strong{
+        font-size: 6rem;
+    }
+    /*섹션3*/
+    #scroll-section-2 .main-message{
+        font-size: 6vw;
+
+    }
+    .main-message small{
+        font-size:1.5vw;
+    }
+    .desc-message{
+        width:20%
+    }
+    /*섹션4*/
+    .mid-message{
+        font-size: 4vw;
+    }
+    .canvas-caption{
+        font-size: 2rem;
+    }
+}
