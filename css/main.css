@@ -117,6 +117,7 @@ a {
 }
 
 /*두번째 섹션*/
+
 .description {
     max-width: 1000px;
     margin: 0 auto;
@@ -196,6 +197,10 @@ a {
     left :0;
     width: 100%;
 }
+
+
+
+
 /*body에 id를 바꿔주면서 섹션에 해당하는 텍스트를 보여준다.*/
 #show-scene-0 #scroll-section-0 .sticky-elem,
 #show-scene-1 #scroll-section-1 .sticky-elem,
@@ -203,6 +208,22 @@ a {
 #show-scene-3 #scroll-section-3 .sticky-elem{
     display: block;
 }
+
+/*섹션2의 애니메이션*/
+#scroll-section-2 .b {
+    top:10%;
+    left:40%;
+}
+#scroll-section-2 .c {
+    top:15%;
+    left:45%;
+}
+#scroll-section-2 .d {
+    top:10%;
+    left:40%;
+}
+
+
 /*모바일 기준으로 위 스타일 작성했으므로 데스크톱기준으로 media작성함
 창크기가 1024px이상이면 아래 스타일 적용
 
@@ -233,6 +254,14 @@ vw는 창크기에 따라 계속 바뀜 -> 디자이너의 의도에 따라감
         font-size: 6rem;
     }
 
+    #scroll-section-2 .b {
+        top:20%;
+        left:53%;
+    }
+    #scroll-section-2 .b {
+        left:55%;
+    }
+
     /*섹션3*/
     #scroll-section-2 .main-message {
         font-size: 6vw;
@@ -255,4 +284,8 @@ vw는 창크기에 따라 계속 바뀜 -> 디자이너의 의도에 따라감
     .canvas-caption {
         font-size: 2rem;
     }
+
+
+
+
 }

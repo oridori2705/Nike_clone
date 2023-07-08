@@ -84,8 +84,14 @@
     function setLayout(){
         //4구간의 scrollHeight를 설정해줌
         for(let i=0;i<sceneInfo.length;i++){
-            // window.innerHeight : 뷰포트의 높이
-            sceneInfo[i].scrollHeight = sceneInfo[i].heightNum * window.innerHeight;
+            if(sceneInfo[i].type=="sticky"){
+                // window.innerHeight : 뷰포트의 높이
+                sceneInfo[i].scrollHeight = sceneInfo[i].heightNum * window.innerHeight;
+                
+            }else if(sceneInfo[i].type=="normal") {
+                //offsetHeight는 html 객체가 원래 가지고 있는 속성으로, 높이값입니다. 즉 우리는 container 객체(.scroll-section)의 높이값을 가져오는 것입니다.
+                sceneInfo[i].scrollHeight = sceneInfo[i].objs.container.offsetHeight;//그냥 기존 높이로 설정하면 딱 그 콘텐츠에 맞게 높이가 설정된다.
+            }
             //뷰포트만큼 heigth설정
             sceneInfo[i].objs.container.style.height = `${sceneInfo[i].scrollHeight}px`
         }
@@ -107,7 +113,7 @@
 
 
 
-    //1번 섹션에서 얼마나 스크롤이 되었는지의 비율을 구해야함(각각의 섹션마다의 스크롤 비율 0~1까지 )
+    //------n번 섹션에서 얼마나 스크롤이 되었는지의 섹션에서의 스크롤 비율을 구해야함(각각의 섹션마다의 스크롤 비율 0~1까지 )--------------
     function calcValues(values,currentYOffset){
         let rv;//비율구하는 변수
 
@@ -159,22 +165,17 @@
         
         switch(currentScene){
             case 0:
-                let messageA_opacity_in =calcValues(values.messageA_opacity_in,currentYOffset)
-                let messageA_opacity_out =calcValues(values.messageA_opacity_out,currentYOffset)
-
-                let messageA_translateY_in =calcValues(values.messageA_translateY_in,currentYOffset)
-                let messageA_translateY_out =calcValues(values.messageA_translateY_out,currentYOffset)
                 //여기서 스크롤 애니메이션이 나타나는 애니메이션 없어지는 애니메이션이 실행됨
                 //그때 현재 섹션에서의 스크롤 비율에 따라 0.22를 기준으로 해서 시작애니메이션 종료애니메이션을 구분함
                 if(scrollRatio <=0.22) {
                     //애니메이션 in
-                    objs.messageA.style.opacity=messageA_opacity_in;
-                    objs.messageA.style.transform=`translateY(${messageA_translateY_in}%)`;
+                    objs.messageA.style.opacity=calcValues(values.messageA_opacity_in,currentYOffset);
+                    objs.messageA.style.transform=`translateY(${calcValues(values.messageA_translateY_in,currentYOffset)}%)`;
 
                 }else{
                     //애니메이션 out
-                    objs.messageA.style.opacity=messageA_opacity_out;
-                    objs.messageA.style.transform=`translateY(${messageA_translateY_out}%)`;
+                    objs.messageA.style.opacity=calcValues(values.messageA_opacity_out,currentYOffset);
+                    objs.messageA.style.transform=`translateY(${calcValues(values.messageA_translateY_out,currentYOffset)}%)`;
                 }
                 break;
             case 1:
@@ -226,10 +227,14 @@
 
     }
     //창이 줄어들때마다 함수실행
-    window.addEventListener("resize",setLayout);
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 900) {
+          window.location.reload();
+      }
+    });
     //스크롤중간에 새로고침했을때 각 섹션의 높이 값과 currentScene값을 설정해줘야한다.
     //또한 모든 이미지로드히고나서 해야하기 때문에 load를 사용
-    window.addEventListener("load",setLayout);
+    window.addEventListener("load",setLayout());
     window.addEventListener("scroll",()=>{
         yOffset=window.scrollY;
         scrollLoop();
