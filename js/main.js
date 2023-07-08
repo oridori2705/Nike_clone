@@ -36,9 +36,14 @@
             values :{
                 messageA_opacity_in : [0,1,{start : 0.1, end:0.2}], //투명도 0에서 1로 (나타날 때)
                 //start,end는 특정 타이밍에 스크롤 애니메이션 나타나게하기 - 10퍼센트부분에서 20퍼센트구간에 등장한다.
-               
+                messageA_translateY_in : [20,0,{start : 0.1,end:0.2}], //20퍼센트정도 Y를 내렸다가 0으로 올리는것
+
                 //나타났다가 사라지는 out도 만들어줘야함
                 messageA_opacity_out : [1,0,{start : 0.25, end:0.3}],
+                messageA_translateY_out : [0,-20,{start : 0.25,end:0.3}], //0에서 -20으로 Y를 올리는것
+
+
+
 
                 messageB_opacity_in : [0,1,{start : 0.3, end:0.4}],
             }
@@ -156,14 +161,20 @@
             case 0:
                 let messageA_opacity_in =calcValues(values.messageA_opacity_in,currentYOffset)
                 let messageA_opacity_out =calcValues(values.messageA_opacity_out,currentYOffset)
+
+                let messageA_translateY_in =calcValues(values.messageA_translateY_in,currentYOffset)
+                let messageA_translateY_out =calcValues(values.messageA_translateY_out,currentYOffset)
                 //여기서 스크롤 애니메이션이 나타나는 애니메이션 없어지는 애니메이션이 실행됨
                 //그때 현재 섹션에서의 스크롤 비율에 따라 0.22를 기준으로 해서 시작애니메이션 종료애니메이션을 구분함
                 if(scrollRatio <=0.22) {
                     //애니메이션 in
                     objs.messageA.style.opacity=messageA_opacity_in;
+                    objs.messageA.style.transform=`translateY(${messageA_translateY_in}%)`;
+
                 }else{
                     //애니메이션 out
                     objs.messageA.style.opacity=messageA_opacity_out;
+                    objs.messageA.style.transform=`translateY(${messageA_translateY_out}%)`;
                 }
                 break;
             case 1:
