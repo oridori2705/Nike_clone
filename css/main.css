@@ -104,6 +104,7 @@ a {
     height: 3em;
     /*현재 아래에 있는2.5rem의 3배를 뜻함*/
     font-size: 2.5rem;
+    font-weight: 900;
     /*root의 font-size의 2.5배*/
     opacity: 0;
     top: 35vh;
@@ -192,7 +193,6 @@ a {
 .sticky-elem{
     display: none;
     position: fixed;
-    top:0;
     left :0;
     width: 100%;
 }
