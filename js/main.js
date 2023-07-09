@@ -30,10 +30,21 @@
                 messageB : document.querySelector("#scroll-section-0 .main-message.b"),
                 messageC : document.querySelector("#scroll-section-0 .main-message.c"),
                 messageD : document.querySelector("#scroll-section-0 .main-message.d"),
+                //이미지 canvas가져오기 그리고 getcontext도 해야함(canvas를 위한 공식같은거)
+                canvas : document.querySelector("#video-canvas-0"),
+                context : document.querySelector("#video-canvas-0").getContext('2d'),
+                videoImages: [],
 
             },
             //어느시점에 등장시킥고 빠져나갈지 지정하기위한 값
             values :{
+                //이미지 갯수
+                videoImageCount : 39,
+                //이미지 순서
+                imageSequence : [0,38],
+                //이미지 애니메이션 사라질때
+                canvas_opacity : [1, 0, {start : 0.9, end :1}],
+
                 messageA_opacity_in : [0,1,{start : 0.1, end:0.2}], //투명도 0에서 1로 (나타날 때)
                 //start,end는 특정 타이밍에 스크롤 애니메이션 나타나게하기 - 10퍼센트부분에서 20퍼센트구간에 등장한다.
                 messageA_translateY_in : [20,0,{start : 0.1,end:0.2}], //20퍼센트정도 Y를 내렸다가 0으로 올리는것
@@ -81,8 +92,20 @@
                 pinB: document.querySelector('#scroll-section-2 .b .pin'),
                 pinC: document.querySelector('#scroll-section-2 .c .pin'),
                 pinD: document.querySelector('#scroll-section-2 .d .pin'),
+                //이미지 canvas가져오기 그리고 getcontext도 해야함(canvas를 위한 공식같은거)
+                canvas : document.querySelector("#video-canvas-1"),
+                context : document.querySelector("#video-canvas-1").getContext('2d'),
+                videoImages: [],
             },
             values: {
+                //이미지 갯수
+                videoImageCount : 136,
+                //이미지 순서
+                imageSequence : [0,135],
+                //이미지 애니메이션 나타날 때
+                canvas_opacity_in: [0, 1, { start: 0, end: 0.1 }],
+                //이미지 애니메이션 사라질때
+                canvas_opacity_out: [1, 0, { start: 0.95, end: 1 }],
                 // 0.05 ~ 0.1  0.13 ~ 0.2
                 messageA_translateY_in: [20, 0, { start: 0.05, end: 0.1 }],
                 messageA_opacity_in: [0, 1, { start: 0.05, end: 0.1 }],
@@ -111,7 +134,7 @@
 
                 // 0.75 ~ 0.8    0.85 ~ 0.9
                 messageD_opacity_in: [0, 1, { start: 0.75, end: 0.8 }],
-                messageD_translateY_in: [20, 0, { start: 0.75, end: 0.8 }],
+                messageD_translateY_in: [30, 0, { start: 0.75, end: 0.8 }],
                 messageD_opacity_out: [1, 0, { start: 0.85, end: 0.9 }],
                 messageD_translateY_out: [0, -20, { start: 0.85, end: 0.9 }],
 
@@ -134,8 +157,22 @@
     ]
     
     
-    
-    
+    function setCanvasImages() {
+		let imgElem;
+        //첫번째 이미지 애니메이션
+		for (let i = 0; i < sceneInfo[0].values.videoImageCount; i++) {
+			imgElem = new Image();
+			imgElem.src = `./video/001/ezgif-frame (${1 + i}).JPG`;
+			sceneInfo[0].objs.videoImages.push(imgElem);
+		}
+        let imgElem2;
+        for (let i = 0; i < sceneInfo[2].values.videoImageCount; i++) {
+			imgElem2 = new Image();
+			imgElem2.src = `./video/002/ezgif-frame2 (${1 + i}).JPG`;
+			sceneInfo[2].objs.videoImages.push(imgElem2);
+		}
+    }
+    setCanvasImages();
     //-------새로고침되거나 브라우저 창크기가 바뀔때 섹션마다의 높이를 비율에 맞게 설정함-----
     function setLayout(){
         //4구간의 scrollHeight를 설정해줌
@@ -164,7 +201,13 @@
         }
         //처음에 렌더링될때 body에 id를 설정해줘야 된다. 후에 currentScene이 바뀔 때 설정되는 setAttrubute가 잘 설정된다.
         document.body.setAttribute('id',`show-scene-${currentScene}`);
-    }
+
+        const heightRatio=window.innerHeight/1440;
+        //position의 top과 left로 50%를 밀고 다시 translate3d로 -50%를해서 자기 위치로 당겨서 정가운데에 위치하게한다
+        //이는 scale로 인해 canvas가 자기 위치에 있지않고, 이상한데로 가있음
+        sceneInfo[0].objs.canvas.style.transform =`translate3d(-50%,-50%,0) scale(${heightRatio})`;
+        sceneInfo[2].objs.canvas.style.transform = `translate3d(-50%, -50%, 0) scale(${heightRatio})`;
+    }   
 
 
 
@@ -221,13 +264,20 @@
         
         switch(currentScene){
             case 0:
+                let sequence = Math.round(calcValues(values.imageSequence,currentYOffset));
+                objs.context.drawImage(objs.videoImages[sequence],0,0);
+
+                //이미지 애니메이션 끝에 사라지는 애니메이션
+                objs.canvas.style.opacity = calcValues(values.canvas_opacity,currentYOffset);
+
+
                 //여기서 스크롤 애니메이션이 나타나는 애니메이션 없어지는 애니메이션이 실행됨
                 //그때 현재 섹션에서의 스크롤 비율에 따라 0.22를 기준으로 해서 시작애니메이션 종료애니메이션을 구분함
                 if(scrollRatio <=0.22) {
                     //애니메이션 in
                     objs.messageA.style.opacity=calcValues(values.messageA_opacity_in,currentYOffset);
                     objs.messageA.style.transform=`translateY(${calcValues(values.messageA_translateY_in,currentYOffset)}%)`;
-
+                    
                 }else{
                     //애니메이션 out
                     objs.messageA.style.opacity=calcValues(values.messageA_opacity_out,currentYOffset);
@@ -268,6 +318,19 @@
 
 
             case 2:
+                let sequence2 = Math.round(calcValues(values.imageSequence, currentYOffset));
+				objs.context.drawImage(objs.videoImages[sequence2], 0, 0);
+
+                if (scrollRatio <= 0.5) {
+					// in
+					objs.canvas.style.opacity = calcValues(values.canvas_opacity_in, currentYOffset);
+				} else {
+					// out
+					objs.canvas.style.opacity = calcValues(values.canvas_opacity_out, currentYOffset);
+				}
+
+
+
                 if (scrollRatio <= 0.17) {
                     // in
                     objs.messageA.style.opacity = calcValues(values.messageA_opacity_in, currentYOffset);
@@ -362,12 +425,15 @@
     //창이 줄어들때마다 함수실행
     window.addEventListener('resize', () => {
         if (window.innerWidth > 900) {
-          window.location.reload();
+            setLayout();
       }
     });
     //스크롤중간에 새로고침했을때 각 섹션의 높이 값과 currentScene값을 설정해줘야한다.
     //또한 모든 이미지로드히고나서 해야하기 때문에 load를 사용
-    window.addEventListener("load",setLayout());
+    window.addEventListener("load",()=>{
+        setLayout();
+        sceneInfo[0].objs.context.drawImage(sceneInfo[0].objs.videoImages[0],0,0);
+    });
     window.addEventListener("scroll",()=>{
         yOffset=window.scrollY;
         scrollLoop();
