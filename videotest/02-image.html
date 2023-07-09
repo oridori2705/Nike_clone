@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+		}
+		body {
+			height: 500vh;
+		}
+		body.before-load {
+			overflow-y: hidden;
+		}
+		.sample-img {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+		}
+	</style>
+</head>
+<body class="before-load">
+	<img class="sample-img" src="../video/001/ezgif-frame (1).JPG">
+
+	<script>
+		const imgElem = document.querySelector('.sample-img');
+		let loadedImageCount= 0; //이미지 로드를 어디까지했는지 체크하는 변수
+		let totalImagesCount = 39; //이미지의 총 갯수
+		const videoImages = [];
+		//이미지를 로드해온다.
+		function loadImages() {
+			for (let i = 0; i < totalImagesCount; i++) {
+				let imgElem = new Image();
+				imgElem.src = `../video/001/ezgif-frame (${1 + i}).JPG`;
+				videoImages.push(imgElem);
+				//한장씩 로드가 끝날 때마다 loadUImageCount를 +1해줌
+				imgElem.addEventListener('load', function () {
+					loadedImageCount++;
+					if (loadedImageCount === totalImagesCount) {
+						console.log('이미지 로드 완료');
+						init(); //초기화함수 실행
+					}
+				});
+			}
+		}
+
+		loadImages();
+
+		let progress;
+		let currentFrame;
+		function init() {
+			document.body.classList.remove('before-load');
+
+			window.addEventListener('scroll', function () {
+				//body.offsetHeight 현재 컨텐츠의 높이(css에 500vh)
+				//innerHeight 뷰포트의 높이
+				//pageYOffset 현재 스크롤 값
+				progress = pageYOffset / (document.body.offsetHeight - window.innerHeight);
+				if (progress < 0) progress = 0;
+				if (progress > 1) progress = 1;
+				requestAnimationFrame(function () {	
+					//0~38이므로 totalImageCount에서 1을 빼줌
+					//거기에 스크롤 비율을 곱하면(ex - 38 * 0.114214215212512 ) 를 반올림하면 0부터 39까지 비율에 따라 이미지를 보여줄 수 있음
+					currentFrame = Math.round((totalImagesCount - 1) * progress);
+					imgElem.src = videoImages[currentFrame].src;
+				});
+			});
+		}
+	</script>
+</body>
+</html>
